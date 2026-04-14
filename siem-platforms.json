@@ -1,0 +1,97 @@
+{
+  "$schema": "./schema/siem-platforms.schema.json",
+  "version": "1.0.0",
+  "lastUpdated": "2026-04-06",
+  "platforms": [
+    {
+      "id": "wazuh", "label": "Wazuh", "icon": "W", "compressionDefault": 7,
+      "description": { "en": "Open-source SIEM & XDR", "fr": "SIEM & XDR open-source" },
+      "ramMultiplier": 1.0, "cpuMultiplier": 1.0, "storageMultiplier": 1.0,
+      "note": { "en": "Wazuh indexer (OpenSearch). Only alerts are indexed (not raw logs). JVM heap = 50% RAM, max 32 GB. Scale with worker nodes + indexer cluster.", "fr": "Indexeur Wazuh (OpenSearch). Seules les alertes sont indexées (pas les logs bruts). Heap JVM = 50% RAM, max 32 Go. Scalabilité via workers + cluster indexeur." },
+      "terminology": {
+        "indexer": { "en": "Indexer nodes", "fr": "Nœuds indexeur" },
+        "forwarder": { "en": "Worker nodes", "fr": "Nœuds worker" },
+        "manager": { "en": "Master node", "fr": "Nœud master" },
+        "dashboard": { "en": "Dashboard nodes", "fr": "Nœuds dashboard" },
+        "singleDesc": { "en": "Single server: Wazuh manager + indexer + dashboard. Ideal for small environments.", "fr": "Serveur unique : Wazuh manager + indexeur + dashboard. Idéal pour les petits environnements." },
+        "distributedDesc": { "en": "Separate Wazuh manager, indexer(s) and dashboard for better performance and resilience.", "fr": "Manager, indexeur(s) et dashboard Wazuh séparés pour de meilleures performances et résilience." },
+        "clusterDesc": { "en": "Multi-node Wazuh cluster with master, worker nodes, dedicated indexers and load balancer.", "fr": "Cluster Wazuh multi-nœuds avec master, workers, indexeurs dédiés et load balancer." }
+      }
+    },
+    {
+      "id": "splunk", "label": "Splunk Enterprise", "icon": "S", "compressionDefault": 2,
+      "description": { "en": "Enterprise SIEM & observability", "fr": "SIEM & observabilité entreprise" },
+      "ramMultiplier": 1.5, "cpuMultiplier": 1.3, "storageMultiplier": 1.2,
+      "note": { "en": "Splunk indexes all raw events (~2:1 compression). Indexers are CPU & I/O intensive. 12+ GB RAM per indexer. License cost not included.", "fr": "Splunk indexe tous les événements bruts (~2:1 compression). Les indexeurs sont CPU & I/O intensifs. 12+ Go RAM par indexeur. Coût licence non inclus." },
+      "terminology": {
+        "indexer": { "en": "Indexers", "fr": "Indexeurs" },
+        "forwarder": { "en": "Heavy Forwarders", "fr": "Heavy Forwarders" },
+        "manager": { "en": "Search Heads", "fr": "Search Heads" },
+        "dashboard": { "en": "Deployment Server", "fr": "Deployment Server" },
+        "singleDesc": { "en": "Single instance: search head + indexer + forwarder. Suitable for POC/small deployments.", "fr": "Instance unique : search head + indexeur + forwarder. Adapté aux POC/petits déploiements." },
+        "distributedDesc": { "en": "Separate search head(s) and indexer(s) with a deployment server for better scalability.", "fr": "Search head(s) et indexeur(s) séparés avec un deployment server pour plus de scalabilité." },
+        "clusterDesc": { "en": "Indexer cluster + search head cluster with heavy forwarders and a Cluster Manager. Required at scale.", "fr": "Cluster d'indexeurs + cluster de search heads avec heavy forwarders et un Cluster Manager. Requis à grande échelle." }
+      }
+    },
+    {
+      "id": "qradar", "label": "IBM QRadar", "icon": "Q", "compressionDefault": 5,
+      "description": { "en": "IBM Security Intelligence", "fr": "IBM Security Intelligence" },
+      "ramMultiplier": 1.4, "cpuMultiplier": 1.3, "storageMultiplier": 1.3,
+      "note": { "en": "QRadar sizes by EPS (events/sec). All-in-One supports up to 5K–15K EPS; above that, add dedicated Event Processors. Ariel DB: ~5–10:1 compression but ~3× index overhead.", "fr": "QRadar dimensionne par EPS. All-in-One supporte 5K–15K EPS ; au-delà, ajouter des Event Processors dédiés. Base Ariel : compression ~5–10:1 mais ~3× surcoût d'indexation." },
+      "terminology": {
+        "indexer": { "en": "Event Processors", "fr": "Event Processors" },
+        "forwarder": { "en": "Event Collectors", "fr": "Event Collectors" },
+        "manager": { "en": "Console (All-in-One)", "fr": "Console (All-in-One)" },
+        "dashboard": { "en": "Console nodes", "fr": "Nœuds console" },
+        "singleDesc": { "en": "Single QRadar Console appliance handling collection, processing and UI. For low EPS.", "fr": "Appliance QRadar Console unique gérant collecte, traitement et UI. Pour faible EPS." },
+        "distributedDesc": { "en": "QRadar Console + dedicated Event Processor(s) for higher EPS capacity.", "fr": "Console QRadar + Event Processor(s) dédiés pour une capacité EPS plus élevée." },
+        "clusterDesc": { "en": "QRadar HA cluster with Event Processors, Event Collectors, and Data Nodes for large-scale deployments.", "fr": "Cluster QRadar HA avec Event Processors, Event Collectors et Data Nodes pour les grands déploiements." }
+      }
+    },
+    {
+      "id": "sentinel", "label": "Microsoft Sentinel", "icon": "MS", "compressionDefault": 6,
+      "description": { "en": "Cloud-native SIEM on Azure", "fr": "SIEM cloud-natif sur Azure" },
+      "ramMultiplier": 0.8, "cpuMultiplier": 0.8, "storageMultiplier": 1.1,
+      "note": { "en": "Sentinel is SaaS — no self-hosted compute. Costs driven by data ingestion (GB/day). Commitment tiers (100+ GB/day) save 30–50%. Basic Logs tier at ~$1.12/GB for verbose data.", "fr": "Sentinel est SaaS — pas de compute auto-hébergé. Coûts basés sur l'ingestion (Go/jour). Paliers d'engagement (100+ Go/jour) économisent 30–50%. Tier Basic Logs à ~1,12 $/Go pour données volumineuses." },
+      "terminology": {
+        "indexer": { "en": "Log Analytics Workspace", "fr": "Espace Log Analytics" },
+        "forwarder": { "en": "Azure Monitor Agent (AMA)", "fr": "Azure Monitor Agent (AMA)" },
+        "manager": { "en": "Sentinel Workspace", "fr": "Espace Sentinel" },
+        "dashboard": { "en": "Workbooks", "fr": "Workbooks" },
+        "singleDesc": { "en": "Single Log Analytics workspace with AMA agents and Data Collection Rules. Sentinel is SaaS — no infrastructure to manage.", "fr": "Espace Log Analytics unique avec agents AMA et règles de collecte. Sentinel est SaaS — aucune infrastructure à gérer." },
+        "distributedDesc": { "en": "Multiple workspaces with cross-workspace queries for data segregation.", "fr": "Espaces multiples avec requêtes cross-workspace pour la séparation des données." },
+        "clusterDesc": { "en": "Multi-workspace architecture with dedicated clusters (100+ GB/day) and ADX for long-term retention at scale.", "fr": "Architecture multi-workspace avec clusters dédiés (100+ Go/jour) et ADX pour la rétention longue durée à grande échelle." }
+      }
+    },
+    {
+      "id": "logrhythm", "label": "LogRhythm", "icon": "LR", "compressionDefault": 2,
+      "description": { "en": "NextGen SIEM Platform", "fr": "Plateforme SIEM NextGen" },
+      "ramMultiplier": 1.6, "cpuMultiplier": 1.3, "storageMultiplier": 2.0,
+      "note": { "en": "LogRhythm stores both raw and parsed copies (2.25× storage amplification). Production XM requires 96+ GB RAM. Data Indexer (DX) requires SSD.", "fr": "LogRhythm stocke copies brutes et analysées (amplification stockage 2,25×). Le XM production nécessite 96+ Go RAM. Le Data Indexer (DX) nécessite du SSD." },
+      "terminology": {
+        "indexer": { "en": "Data Indexer (DX)", "fr": "Data Indexer (DX)" },
+        "forwarder": { "en": "System Monitor Agents", "fr": "System Monitor Agents" },
+        "manager": { "en": "Platform Manager (PM)", "fr": "Platform Manager (PM)" },
+        "dashboard": { "en": "Web Console", "fr": "Web Console" },
+        "singleDesc": { "en": "Single LogRhythm XM appliance (PM + DP + DX integrated). Up to 2,000–5,000 MPS.", "fr": "Appliance LogRhythm XM unique (PM + DP + DX intégrés). Jusqu'à 2 000–5 000 MPS." },
+        "distributedDesc": { "en": "Separate Platform Manager, Data Processor (DP), and Data Indexer (DX) for improved performance.", "fr": "Platform Manager, Data Processor (DP) et Data Indexer (DX) séparés pour de meilleures performances." },
+        "clusterDesc": { "en": "Multiple Data Indexers (hot/warm nodes), Data Processors, System Monitor Agents, and dedicated AI Engine for large environments.", "fr": "Data Indexers multiples (nœuds hot/warm), Data Processors, System Monitor Agents et AI Engine dédié pour grands environnements." }
+      }
+    },
+    {
+      "id": "graylog", "label": "Graylog", "icon": "G", "compressionDefault": 3,
+      "description": { "en": "Log management & SIEM", "fr": "Gestion de logs & SIEM" },
+      "ramMultiplier": 1.1, "cpuMultiplier": 1.0, "storageMultiplier": 1.2,
+      "note": { "en": "Graylog indexes all logs into OpenSearch (LZ4, ~1.3–1.7× compression). Storage formula: daily ingest × retention days × 1.2. RAM: 50% for JVM heap (max 32 GB).", "fr": "Graylog indexe tous les logs dans OpenSearch (LZ4, ~1,3–1,7× compression). Stockage : volume quotidien × jours rétention × 1,2. RAM : 50% heap JVM (max 32 Go)." },
+      "terminology": {
+        "indexer": { "en": "Data Nodes (OpenSearch)", "fr": "Data Nodes (OpenSearch)" },
+        "forwarder": { "en": "Sidecars / Forwarders", "fr": "Sidecars / Forwarders" },
+        "manager": { "en": "Graylog Server nodes", "fr": "Nœuds Graylog Server" },
+        "dashboard": { "en": "Web Interface (built-in)", "fr": "Interface Web (intégrée)" },
+        "singleDesc": { "en": "Single Graylog Server + Data Node (OpenSearch) + MongoDB. Suitable for small log volumes.", "fr": "Graylog Server unique + Data Node (OpenSearch) + MongoDB. Adapté aux faibles volumes de logs." },
+        "distributedDesc": { "en": "Separate Graylog Server(s) and Data Node cluster with MongoDB replica set.", "fr": "Serveur(s) Graylog et cluster Data Nodes séparés avec replica set MongoDB." },
+        "clusterDesc": { "en": "Conventional deployment: 3+ Graylog Servers behind a load balancer, 3+ Data Nodes, MongoDB replica set, and Sidecars for log collection.", "fr": "Déploiement conventionnel : 3+ serveurs Graylog derrière un load balancer, 3+ Data Nodes, replica set MongoDB et Sidecars pour la collecte." }
+      }
+    }
+  ]
+}
